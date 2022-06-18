@@ -74,11 +74,4 @@ exports.executeQuery = (query) => {
     }, query);
 }
 
-exports.addHeaders = (res) => {
-    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
-    res.header('Access-Control-Allow-Origin', '*');
-    return res;
-}
-
 exports.handler = serverless(app);
