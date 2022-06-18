@@ -14,7 +14,7 @@ app.get('/.netlify/functions/auth/v1/authorize', bodyParser.json(), async functi
     res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
 });
 
-app.post('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
+app.get('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
     const result = await exports.login(req, res);
 });
 
