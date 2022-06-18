@@ -52,14 +52,14 @@ exports.verifyToken = function (req, res, next) {
             if (req.query.response_type === 'code') {
                 res.redirect('/');
             } else {
-                res.status(400).json({ data: null, error: 'Access Denied' });
+                res.status(403).json({ data: null, error: 'Access Denied' });
             }
         }
     } catch (e) {
         if (req.query.response_type === 'code') {
             res.redirect('/');
         } else {
-            res.status(400).json({ data: null, error: 'Access Denied' });
+            res.status(403).json({ data: null, error: 'Access Denied' });
         }
     }
 }
