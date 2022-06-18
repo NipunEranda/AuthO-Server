@@ -66,7 +66,7 @@ exports.login = async (req, res) => {
                     })
                 });
                 user.executeQuery(`DELETE FROM auth WHERE id = ${u.auth_id}`);
-                return { status: 200, response: { data: { status: 'success', token: token, error: null }, error: null } };
+                return { status: 200, response: { data: { status: 'success', token: token, user: { id: u.id, name: u.name, email: u.email }, error: null }, error: null } };
             }else{
                 return { status: 400, response: { data: null, error: 'User doesn\'t exists' } };
             }
