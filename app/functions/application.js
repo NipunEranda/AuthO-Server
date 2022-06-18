@@ -6,9 +6,7 @@ const bodyParser = require('body-parser');
 const syncsql = require('sync-sql');
 const moment = require('moment');
 const user = require('./user');
-const cors = require('cors');
 const app = express();
-app.use(cors);
 
 app.get('/.netlify/functions/application/all', bodyParser.json(), user.verifyToken, async function (req, res) {
     const result = await exports.getApplications();

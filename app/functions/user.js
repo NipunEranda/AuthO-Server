@@ -6,9 +6,7 @@ const serverless = require('serverless-http');
 const bodyParser = require('body-parser');
 const syncsql = require('sync-sql');
 const moment = require('moment');
-const cors = require('cors');
 const app = express();
-app.use(cors);
 
 app.post('/.netlify/functions/user/google', bodyParser.json(), async function (req, res) {
     const result = await exports.saveUser({ sub: req.body.sub, name: req.body.name, email: req.body.email, password: req.body.password });
