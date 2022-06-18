@@ -10,38 +10,35 @@ const user = require('./user');
 const app = express();
 
 app.get('/.netlify/functions/auth/v1/authorize', bodyParser.json(), async function (req, res) {
-    await exports.getCode(req, res);
+    const result = await exports.getCode(req, res);
+    res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
 });
 
 app.post('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
-    await exports.login(req, res);
+    const result = await exports.login(req, res);
 });
 
 exports.getCode = async (req, res) => {
     try {
         if (req.query.client_id && req.query.redirect_uri && req.query.response_type && req.query.state && req.query.user) {
             if (!(req.query.response_type === 'code')) {
-                res.status(400).json({ error: 'Invalid response type' });
-                return;
+                return { status: 400, response: { data: null, error: 'Invalid response type' } };
             }
             if ((isNaN(parseInt(req.query.state)))) {
-                res.status(400).json({ error: 'State should be a numerical value' });
-                return;
+                return { status: 400, response: { data: null, error: 'State should be a numerical value' } };
             }
             const existingApplication = user.executeQuery(`SELECT * FROM application WHERE apiKey='${req.query.client_id}' and redirect_uri='${req.query.redirect_uri}'`);
             if (existingApplication.data.rows.length > 0) {
                 const code = crypto.randomBytes(32).toString('hex');
                 const query = `INSERT INTO auth VALUES(0, ${req.query.user},'${req.query.client_id}', '${req.query.redirect_uri}', '${req.query.response_type}', '${code}', '${req.query.state}', '${moment(new Date()).format('YYYY-MM-DD')}')`;
-                const test = user.executeQuery(query);
-                console.log(test);
-                res.redirect(`${req.query.redirect_uri}?code=${code}`);
+                user.executeQuery(query);
+                return { status: 200, response: { data: {code: code}, error: null } };
             } else {
-                res.status(400).json({ error: 'client or redirect_uri is invalid' });
+                return { status: 400, response: { data: null, error: 'client or redirect_uri is invalid' } };
             }
 
         } else {
-            const result = {};
-            res.status(result.status ? result.status : 500).json(result.response ? result.response : { error: 'Empty required fields' });
+            return { status: 400, response: { data: null, error: 'Empty required fields' } };
         }
     } catch (e) {
         console.log(e);
@@ -54,8 +51,7 @@ exports.login = async (req, res) => {
         const result = {};
         if (req.query.client_id && req.query.redirect_uri && req.query.code) {
             if (!(req.query.response_type === 'token')) {
-                res.status(400).json({ error: 'Invalid response type' });
-                return;
+                return { status: 400, response: { data: null, error: 'Invalid response type' } };
             }
             const auth = user.executeQuery(`SELECT a.id as 'auth_id', u.id, u.name, u.googleId, u.email FROM auth a, user u WHERE client_id='${req.query.client_id}' and redirect_uri='${req.query.redirect_uri}' and code = '${req.query.code}' and u.googleId = a.user`);
             const u = auth.data.rows[0];
@@ -66,16 +62,16 @@ exports.login = async (req, res) => {
                     })
                 });
                 user.executeQuery(`DELETE FROM auth WHERE id = ${u.auth_id}`);
-                res.status(200).json({ response: { status: 'success', token: token, error: null }});
+                return { status: 200, response: { data: { status: 'success', token: token, error: null }, error: null } };
             }else{
-                res.status(result.status ? result.status : 400).json(result.response ? result.response : { error: 'User doesn\'t exists' });
+                return { status: 400, response: { data: null, error: 'User doesn\'t exists' } };
             }
         } else {
-            res.status(result.status ? result.status : 500).json(result.response ? result.response : { error: 'Empty required fields' });
+            return { status: 400, response: { data: null, error: 'Empty required fields' } };
         }
     }catch(e){
         console.log(e);
-        res.status(500).json({ response: { status: 'failed', token: null, error: e }});
+        return { status: 500, response: { data: null, error: e } };
     }
 };
 
