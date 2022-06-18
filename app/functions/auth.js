@@ -15,9 +15,7 @@ app.get('/.netlify/functions/auth/v1/authorize', bodyParser.json(), async functi
 });
 
 app.get('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
-    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
-    res.header('Access-Control-Allow-Origin', '*');
+    res = await exports.setHeaders(res);
     const result = await exports.login(req, res);
     res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
 });
@@ -78,5 +76,12 @@ exports.login = async (req, res) => {
         return { status: 500, response: { data: null, error: e } };
     }
 };
+
+exports.setHeaders = async (res) => {
+    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+    res.header('Access-Control-Allow-Origin', '*');
+    return res;
+}
 
 exports.handler = serverless(app);
