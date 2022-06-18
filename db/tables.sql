@@ -30,10 +30,12 @@ CREATE TABLE application(
 
 CREATE TABLE auth(
     id BIGINT(200) NOT NULL AUTO_INCREMENT,
+    user VARCHAR(255) NOT NULL,
     client_id VARCHAR(255) NOT NULL,
     redirect_uri VARCHAR(255) NOT NULL,
     response_type VARCHAR(10) NOT NULL,
     code VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
+    created DATETIME NOT NULL,
     CONSTRAINT auth_pk PRIMARY KEY(id)
 );

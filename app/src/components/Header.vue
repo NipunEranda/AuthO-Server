@@ -8,7 +8,7 @@
         class="d-inline-block align-top"
         alt=""
       />
-      Auth Server
+      Auth Portal
     </router-link>
     <button
       class="navbar-toggler"
