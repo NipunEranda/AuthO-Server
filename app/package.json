@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --development",
     "build": "vue-cli-service build",
-    "start": "netlify dev --port=8888"
+    "start": "netlify dev"
   },
   "repository": {
     "type": "git",
