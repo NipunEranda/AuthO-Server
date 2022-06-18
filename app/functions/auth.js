@@ -15,9 +15,6 @@ app.get('/.netlify/functions/auth/v1/authorize', bodyParser.json(), async functi
 });
 
 app.get('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
-    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
-    res.header('Access-Control-Allow-Origin', '*');
     const result = await exports.login(req, res);
     res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
 });
