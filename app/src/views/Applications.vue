@@ -47,6 +47,7 @@ export default {
   },
   methods: {
     getApplications: function () {
+      console.log(`${process.env.VUE_APP_API_BASE_URL}/.netlify/functions/application/all`);
       axios
         .get(`${process.env.VUE_APP_API_BASE_URL}/.netlify/functions/application/all`, {
           headers: {
@@ -54,6 +55,7 @@ export default {
           },
         })
         .then((response) => {
+          console.log(response);
           store.dispatch("updateApplications", response.data.data);
           this.applications = helper.methods.objectToArray(computed(() => store.state.applications).value);
         });
