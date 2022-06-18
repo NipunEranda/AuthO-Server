@@ -61,12 +61,12 @@ exports.login = async (req, res) => {
             const u = auth.data.rows[0];
             if(u){
                 const token = await new Promise((resolve, reject) => {
-                    jwt.sign({ user: { id: u.id, name: u.name, email: u.email, created: moment(new Date()).format('YYYY-MM-DD') } }, process.env.SECRET, { expiresIn: '24h' }, (err, token) => {
+                    jwt.sign({ user: { id: u.id, sid: u.googleId, name: u.name, email: u.email, created: moment(new Date()).format('YYYY-MM-DD') } }, process.env.SECRET, { expiresIn: '24h' }, (err, token) => {
                         resolve(token);
                     })
                 });
                 user.executeQuery(`DELETE FROM auth WHERE id = ${u.auth_id}`);
-                return { status: 200, response: { data: { status: 'success', token: token, user: { id: u.id, name: u.name, email: u.email }, error: null }, error: null } };
+                return { status: 200, response: { data: { status: 'success', token: token, user: { id: u.id, sid: u.googleId, name: u.name, email: u.email }, error: null }, error: null } };
             }else{
                 return { status: 400, response: { data: null, error: 'User doesn\'t exists' } };
             }
