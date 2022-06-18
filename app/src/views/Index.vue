@@ -125,7 +125,7 @@ export default {
             ) {
               axios
                 .post(
-                  `${process.env.VUE_APP_API_BASE_URL}/user/google`,
+                  `/user/google`,
                   response.data
                 )
                 .then((res) => {
