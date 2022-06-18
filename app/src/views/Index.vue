@@ -78,8 +78,7 @@ export default {
   data() {
     return {
       store: useStore(),
-      user: computed(() => store.state.currentUser),
-      api_url: process.env.VUE_APP_API_BASE_URL,
+      user: computed(() => store.state.currentUser)
     };
   },
   methods: {

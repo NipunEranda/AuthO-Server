@@ -47,9 +47,9 @@ export default {
   },
   methods: {
     getApplications: function () {
-      console.log(`${process.env.VUE_APP_API_BASE_URL}/.netlify/functions/application/all`);
+      console.log(`${process.env.VUE_APP_API_BASE_URL}/application/all`);
       axios
-        .get(`${process.env.VUE_APP_API_BASE_URL}/.netlify/functions/application/all`, {
+        .get(`${process.env.VUE_APP_API_BASE_URL}/application/all`, {
           headers: {
             Authroization: `bearer ${this.user.token.toString()}`,
           },
