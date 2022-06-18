@@ -1,0 +1,39 @@
+.pointer{
+    cursor: pointer;
+}
+
+.loader {
+    margin: auto;
+    border: 20px solid #343a40;
+    border-radius: 50%;
+    border-top: 20px solid #ffffff;
+    width: 150px;
+    height: 150px;
+    animation: spinner 2s linear infinite;
+  }
+
+  @keyframes spinner {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .container-loader{
+    position: fixed;
+    top: 0;left: 0;right: 0; bottom: 0;
+    height: 100vh;
+    margin: auto;
+    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .loader{
+    margin-top: 40vh;
+  }
+
+  .hidden{
+    display: none;
+  }
+
+  .show{
+      display: block;
+  }

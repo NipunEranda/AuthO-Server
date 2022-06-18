@@ -1,10 +1,36 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <div class="container-loader hidden"><div class="loader"></div></div>
+    <Header v-if="showHeader" />
+    <router-view />
+  </div>
 </template>
+
+<script>
+import Header from "@/components/Header.vue";
+import store from './store';
+import { computed } from 'vue';
+import { useStore } from "vuex";
+
+export default {
+  data() {
+    return {
+      store: useStore(),
+      user: computed(() => store.state.currentUser),
+      showHeader: false,
+    };
+  },
+  watch: {
+    $route: function (to, from) {
+      if (to.name === "index" || to.name === "auth") this.showHeader = false;
+      else this.showHeader = true;
+    },
+  },
+  components: {
+    Header,
+  },
+};
+</script>
 
 <style>
 #app {
@@ -27,4 +53,10 @@ nav a {
 nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.nav-item {
+  text-decoration: none !important;
+}
+
+@import url("./assets/css/index.css");
 </style>

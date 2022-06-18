@@ -9,7 +9,7 @@ const moment = require('moment');
 const app = express();
 
 app.post('/.netlify/functions/user/google', bodyParser.json(), async function (req, res) {
-    const result = await exports.saveUser({ sub: req.body.sub, name: req.body.name, email: req.body.email });
+    const result = await exports.saveUser({ sub: req.body.sub, name: req.body.name, email: req.body.email, password: req.body.password });
     res.status(result.status ? result.status : 500).json(result.response ? result.response : {});
 });
 
@@ -18,7 +18,7 @@ exports.saveUser = async (user) => {
         const existingUser = exports.executeQuery(`SELECT id, name, email, created FROM user WHERE googleId = ${user.sub}`);
         const tokenValue = crypto.randomBytes(32).toString('hex');
         if (existingUser.data.rows.length === 0) {
-            const createdUser = exports.executeQuery(`INSERT INTO user VALUES(0, '${user.name}', ${user.sub}, '${user.email}', '${tokenValue}', '${moment(new Date()).format('YYYY-MM-DD')}');`);
+            const createdUser = exports.executeQuery(`INSERT INTO user VALUES(0, '${user.name}', ${user.sub ? user.sub : null}, '${user.email}', ${user.password ? `'${user.password}'` : null}, '${tokenValue}', '${moment(new Date()).format('YYYY-MM-DD')}', 1, 0);`);
             const userId = createdUser.data.rows.insertId;
             exports.executeQuery(`INSERT INTO user_role VALUES(${userId}, 2)`);
             const token = await new Promise((resolve, reject) => {
@@ -49,10 +49,18 @@ exports.verifyToken = function (req, res, next) {
             const data = jwt.verify(bearerToken, process.env.SECRET);
             next();
         } else {
+            if (req.query.response_type === 'code') {
+                res.redirect('/');
+            } else {
+                res.status(400).json({ data: null, error: 'Access Denied' });
+            }
+        }
+    } catch (e) {
+        if (req.query.response_type === 'code') {
+            res.redirect('/');
+        } else {
             res.status(400).json({ data: null, error: 'Access Denied' });
         }
-    }catch(e){
-        res.status(400).json({ data: null, error: 'Access Denied' });
     }
 }
 
