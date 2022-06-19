@@ -14,8 +14,7 @@ app.get('/.netlify/functions/auth/v1/authorize', bodyParser.json(), async functi
     res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
     res.header('Access-Control-Allow-Origin', '*');
     const result = await exports.getCode(req, res);
-    res.redirect(`${req.params.redirect_uri}?code=${result.response.data.code}`);
-    //res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
+    res.status(result ? result.status ? result.status : 500 : 500).json(result ? result.response ? result.response : {} : {});
 });
 
 app.post('/.netlify/functions/auth/v1/login', bodyParser.json(), async function(req, res) {
