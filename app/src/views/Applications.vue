@@ -3,7 +3,7 @@
     <div class="container pt-3 pl-2 pr-2">
       <div class="row operations p-0 m-0 mb-3">
         <div class="col col-2 pl-0 pr-0">
-          <button class="btn btn-sm btn-primary add-btn w-100 pointer">
+          <button class="btn btn-sm btn-primary add-btn w-100 pointer" @click="openAddApplication()">
             <i class="fa fa-plus"></i> Add Project
           </button>
         </div>
@@ -29,6 +29,56 @@
         </table>
       </div>
     </div>
+
+    <!-- Main Modal -->
+    <div
+      class="modal fade"
+      id="mainModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="projectsLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="mainModalTitle">Add Application</h5>
+            <button
+              type="button"
+              class="close pointer"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary pointer"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button
+              id="saveBtn"
+              type="button"
+              class="btn btn-primary pointer"
+              data-dismiss="modal"
+              @click="save()"
+              :disabled="errorMessage"
+            >
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </template>
 
@@ -43,6 +93,7 @@ export default {
       store: useStore(),
       user: computed(() => store.state.currentUser),
       applications: null,
+      errorMessage: null
     };
   },
   methods: {
@@ -60,6 +111,9 @@ export default {
     },
     dateFormat: function(date, format){
         return helper.methods.dateFormat(date, format);
+    },
+    openAddApplication: function(){
+      $('#mainModal').modal("show");
     }
   },
   mounted: function(){
@@ -67,3 +121,32 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+tr,
+th,
+td {
+  padding: 10px !important;
+}
+
+tr {
+  text-align: left;
+  cursor: pointer;
+  border-bottom: 1px solid #e9ecef;
+  border-top: none !important;
+}
+
+.fieldLabel {
+  text-align: left;
+  font-size: 14px;
+  color: rgb(78, 78, 78);
+}
+
+.bottomSpace {
+  margin-bottom: 10px;
+}
+
+.table-bordered {
+  border: 1px solid black !important;
+}
+</style>
