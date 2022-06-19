@@ -124,7 +124,7 @@ export default {
             ) {
               axios
                 .post(
-                  `.netlify/functions/user/google`,
+                  `/.netlify/functions/user/google`,
                   response.data
                 )
                 .then((res) => {

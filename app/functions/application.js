@@ -9,6 +9,9 @@ const user = require('./user');
 const app = express();
 
 app.get('/.netlify/functions/application/all', bodyParser.json(), user.verifyToken, async function (req, res) {
+    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+    res.header('Access-Control-Allow-Origin', '*');
     const result = await exports.getApplications();
     res.status(result.status ? result.status : 500).json(result.response ? result.response : {});
 });

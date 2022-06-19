@@ -9,6 +9,9 @@ const moment = require('moment');
 const app = express();
 
 app.post('/.netlify/functions/user/google', bodyParser.json(), async function (req, res) {
+    res.header('Access-Control-Allow-Methods', 'HEAD, GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', req.header('Access-Control-Request-Headers'));
+    res.header('Access-Control-Allow-Origin', '*');
     const result = await exports.saveUser({ sub: req.body.sub, name: req.body.name, email: req.body.email, password: req.body.password });
     res.status(result.status ? result.status : 500).json(result.response ? result.response : {});
 });

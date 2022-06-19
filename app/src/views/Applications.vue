@@ -12,18 +12,18 @@
         <table class="table table-borderless table-hover table-sm">
           <thead class="bg-dark" style="color: white; text-align: left">
             <tr>
-              <th class="col-3">Application</th>
-              <th class="col-2">Status</th>
-              <th class="col-2">Created</th>
-              <th class="col-2">Updated</th>
+              <th class="col-3 pl-2">Application</th>
+              <th class="col-2 pl-2">Status</th>
+              <th class="col-2 pl-2">Created</th>
+              <th class="col-2 pl-2">Updated</th>
             </tr>
           </thead>
           <tbody>
             <tr class="pointer" v-for="(application, a) in applications" :key="a">
-              <td class="col-3 text-left" v-html="`${application.name}<br/>${application.apiKey}`"></td>
-              <td class="col-2 text-left" v-text="application.isActive === 1 ? 'active' : 'inactive'"></td>
-              <td class="col-2 text-left" v-text="dateFormat(application.created, 'YYYY-MM-DD')"></td>
-              <td class="col-2 text-left" v-text="dateFormat(application.updated, 'YYYY-MM-DD')"></td>
+              <td class="col-3 pl-2 text-left" v-html="`${application.name}<br/>${application.apiKey}`"></td>
+              <td class="col-2 pl-2 text-left" v-text="application.isActive === 1 ? 'active' : 'inactive'"></td>
+              <td class="col-2 pl-2 text-left" v-text="dateFormat(application.created, 'YYYY-MM-DD')"></td>
+              <td class="col-2 pl-2 text-left" v-text="dateFormat(application.updated, 'YYYY-MM-DD')"></td>
             </tr>
           </tbody>
         </table>
@@ -47,7 +47,6 @@ export default {
   },
   methods: {
     getApplications: function () {
-      console.log(`${process.env.VUE_APP_API_BASE_URL}/application/all`);
       axios
         .get(`${process.env.VUE_APP_API_BASE_URL}/application/all`, {
           headers: {
@@ -55,7 +54,6 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response);
           store.dispatch("updateApplications", response.data.data);
           this.applications = helper.methods.objectToArray(computed(() => store.state.applications).value);
         });
