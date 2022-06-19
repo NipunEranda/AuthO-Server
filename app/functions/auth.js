@@ -29,9 +29,11 @@ exports.getCode = async (req, res) => {
     try {
         if (req.query.client_id && req.query.redirect_uri && req.query.response_type && req.query.state && req.query.user) {
             if (!(req.query.response_type === 'code')) {
+                console.log('Invalid response type');
                 return { status: 400, response: { data: null, error: 'Invalid response type' } };
             }
             if ((isNaN(parseInt(req.query.state)))) {
+                console.log('State should be a numerical value');
                 return { status: 400, response: { data: null, error: 'State should be a numerical value' } };
             }
             const existingApplication = user.executeQuery(`SELECT * FROM application WHERE apiKey='${req.query.client_id}' and redirect_uri='${req.query.redirect_uri}'`);
@@ -41,10 +43,12 @@ exports.getCode = async (req, res) => {
                 user.executeQuery(query);
                 return { status: 200, response: { data: {code: code}, error: null } };
             } else {
+                console.log('client or redirect_uri is invalid');
                 return { status: 400, response: { data: null, error: 'client or redirect_uri is invalid' } };
             }
 
         } else {
+            console.log('Empty required fields');
             return { status: 400, response: { data: null, error: 'Empty required fields' } };
         }
     } catch (e) {
@@ -58,6 +62,7 @@ exports.login = async (req, res) => {
         const result = {};
         if (req.query.client_id && req.query.redirect_uri && req.query.code) {
             if (!(req.query.response_type === 'token')) {
+                console.log('Invalid response type');
                 return { status: 400, response: { data: null, error: 'Invalid response type' } };
             }
             const auth = user.executeQuery(`SELECT a.id as 'auth_id', u.id, u.name, u.googleId, u.email FROM auth a, user u WHERE client_id='${req.query.client_id}' and redirect_uri='${req.query.redirect_uri}' and code = '${req.query.code}' and u.googleId = a.user`);
@@ -71,9 +76,11 @@ exports.login = async (req, res) => {
                 user.executeQuery(`DELETE FROM auth WHERE id = ${u.auth_id}`);
                 return { status: 200, response: { data: { status: 'success', token: token, user: { id: u.id, sid: u.googleId, name: u.name, email: u.email }, error: null }, error: null } };
             }else{
+                console.log('User doesn\'t exists');
                 return { status: 400, response: { data: null, error: 'User doesn\'t exists' } };
             }
         } else {
+            console.log('Empty required fields');
             return { status: 400, response: { data: null, error: 'Empty required fields' } };
         }
     }catch(e){
