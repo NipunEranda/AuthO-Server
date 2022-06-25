@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <router-link class="navbar-brand" href="#" to="/home">
       <img
-        src="../assets/typefi-o.svg"
+        src="../assets/favicon.png"
         width="30"
         height="30"
         class="d-inline-block align-top"

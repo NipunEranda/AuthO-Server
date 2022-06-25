@@ -2,7 +2,7 @@
   <div class="flux-container btn-dark" style="height: 100vh">
     <div class="row" style="padding-top: 150px; padding-bottom: 30px">
       <div class="col-12">
-        <img class="login-logo" src="../assets/typefi-o.svg" />
+        <img class="login-logo" src="../assets/favicon.png" />
       </div>
     </div>
     <div class="container">
